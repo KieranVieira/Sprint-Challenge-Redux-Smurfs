@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux'
 
-import { getSmurfs, addSmurf, deleteSmurf } from '../actions'
+import { getSmurfs, addSmurf, deleteSmurf, updateSmurf } from '../actions'
 
 import SmurfList from './SmurfList'
 import SmurfForm from './SmurfForm'
@@ -13,7 +13,9 @@ class App extends Component {
       name:'',
       age:'',
       height:''
-    }
+    },
+    isUpdatingSmurf: false,
+    updatingId: ''
   }
 
   componentDidMount(){
@@ -46,11 +48,48 @@ class App extends Component {
     this.props.deleteSmurf(id)
   }
 
+  startUpdatingSmurf = (e, smurf) => {
+    e.preventDefault();
+    this.setState({
+      smurf:{
+        name: smurf.name,
+        age: smurf.age,
+        height: smurf.height
+      },
+      isUpdatingSmurf: true,
+      updatingId: smurf.id
+    })
+  }
+
+  updateSmurfSubmit = e => {
+    e.preventDefault();
+    this.props.updateSmurf(this.state.smurf, this.state.updatingId);
+    this.setState({
+      smurf: {
+        name:'',
+        age:'',
+        height:''
+      },
+      isUpdatingSmurf: false,
+      updatingId: ''
+    })
+  }
+
   render() {
     return (
       <div className="App">
-        <SmurfList smurfs={this.props.smurfs} deleteSmurf={this.deleteSmurf}/>
-        <SmurfForm handleFormChange={this.handleFormChange} addSmurf={this.addSmurfSubmit} values={this.state.smurf}/>
+        <SmurfList 
+          smurfs={this.props.smurfs} 
+          deleteSmurf={this.deleteSmurf} 
+          startUpdatingSmurf={this.startUpdatingSmurf}
+        />
+        <SmurfForm 
+          handleFormChange={this.handleFormChange} 
+          addSmurf={this.addSmurfSubmit} 
+          updateSmurfSubmit={this.updateSmurfSubmit}
+          isUpdatingSmurf={this.state.isUpdatingSmurf}
+          values={this.state.smurf}
+        />
       </div>
     );
   }
@@ -67,6 +106,7 @@ export default connect(
   {
     getSmurfs,
     addSmurf,
-    deleteSmurf
+    deleteSmurf,
+    updateSmurf
   }
 )(App);

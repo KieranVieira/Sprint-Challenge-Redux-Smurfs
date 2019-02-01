@@ -2,7 +2,7 @@ import React from 'react';
 
 const SmurfForm = props => {
     return(
-        <form onSubmit={props.addSmurf}>
+        <form onSubmit={props.isUpdatingSmurf ? props.updateSmurfSubmit : props.addSmurf}>
             <input 
                 type="text"
                 placeholder="Name" 
@@ -27,7 +27,7 @@ const SmurfForm = props => {
                 required 
                 onChange={props.handleFormChange}
             />
-            <button type="submit">Add Smurf</button>
+            <button type="submit">{props.isUpdatingSmurf ? 'Update Smurf' : 'Add Smurf'}</button>
         </form>
     )
 }
