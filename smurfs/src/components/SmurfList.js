@@ -6,7 +6,7 @@ const SmurfList = props => {
     return(
         <div>
             {props.smurfs.map(smurf => {
-                return <Smurf data={smurf} />
+                return <Smurf data={smurf} deleteSmurf={props.deleteSmurf}/>
             })}
         </div>
     )
